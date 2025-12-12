@@ -80,6 +80,38 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
                 }
             }
         );
+
+        db.run(`CREATE TABLE categories (
+                category_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT UNIQUE
+            )`, (err) => {
+                if(err){
+                    console.log('Categories table already created');
+                }else{
+                    console.log('Categories table created');
+                    // Insert default categories for Vintage Vinyl Records
+                    const categories = ['Rock', 'Jazz', 'Classical', 'Blues', 'Pop', 'Electronic', 'Hip Hop', 'Country'];
+                    categories.forEach(category => {
+                        db.run('INSERT INTO categories (name) VALUES (?)', [category]);
+                    });
+                }
+            }
+        );
+
+        db.run(`CREATE TABLE item_categories (
+                item_id INTEGER,
+                category_id INTEGER,
+                PRIMARY KEY (item_id, category_id),
+                FOREIGN KEY (item_id) REFERENCES items(item_id),
+                FOREIGN KEY (category_id) REFERENCES categories(category_id)
+            )`, (err) => {
+                if(err){
+                    console.log('Item_categories table already created');
+                }else{
+                    console.log('Item_categories table created');
+                }
+            }
+        );
     }
 });
 
