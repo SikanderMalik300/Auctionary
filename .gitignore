@@ -131,4 +131,5 @@ dist
 
 
 # Ash Added
-*.sqlitenode_modules/
+*.sqlite
+node_modules/
